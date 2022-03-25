@@ -1,0 +1,61 @@
+{
+  "name": "whatsapp-cakrabot-md",
+  "version": "1.2.0",
+  "description": "Make something for whatsapp multi-device Beta without the connection :)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cakrayp/whatsapp-cakrabot-md.git"
+  },
+  "keywords": [
+    "whatsapp",
+    "multi-device"
+  ],
+  "author": "Cakra Yudha Pratama",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cakrayp/whatsapp-cakrabot-md/issues"
+  },
+  "homepage": "https://github.com/cakrayp/whatsapp-cakrabot-md#readme",
+  "dependencies": {
+    "@adiwajshing/baileys-md": "github:adiwajshing/baileys#multi-device",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@hapi/boom": "^9.1.4",
+    "axios": "^0.25.0",
+    "chalk": "^4.1.0",
+    "cheerio": "^1.0.0-rc.10",
+    "fast-stream-to-buffer": "^1.0.0",
+    "feedid": "^2.0.1",
+    "figlet": "^1.5.2",
+    "file-type": "^16.2.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "folder-delete": "^1.0.4",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "human-readable": "^0.2.1",
+    "instatouch": "^2.3.14",
+    "lolcatjs": "^2.4.1",
+    "make-dir": "^3.1.0",
+    "mimetype": "^0.0.8",
+    "moment-timezone": "^0.5.34",
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.1",
+    "node-gtts": "^2.0.2",
+    "os": "^0.1.2",
+    "performance-now": "^2.1.0",
+    "pino": "^7.6.5",
+    "request": "^2.88.2",
+    "spinnies": "^0.3.2",
+    "ssweb-api": "github:caliph91/ssweb-api",
+    "systeminformation": "^5.11.8",
+    "tinyurl": "^1.1.7",
+    "translate-google": "^1.5.0",
+    "vinyl-buffer": "^1.0.1",
+    "w5-textmaker": "^1.0.2",
+    "wa-sticker-formatter": "^4.3.2"
+  }
+}
