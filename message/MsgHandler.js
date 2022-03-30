@@ -114,6 +114,8 @@ kickall = [];
 module.exports = async (cakrayp, store, msg) => {
     try {
         // if (m.key.fromMe) return      because it has been placed in file ../index.js
+        if (msg.message?.protocolMessage) return;
+        if (!msg.message) return;       // without message Object...
         const time = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('DD-MM-YY HH:mm:ss')
         const ucapan = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a')
         const fromMe = msg.key.fromMe
