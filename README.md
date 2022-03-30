@@ -132,13 +132,15 @@ global.messageHandler = {
 
 ## Usage for Windows/RDP/linux In terminals
 
-- ### Ingredients for installations
+`FOR CLI (Command Line)`
+
+### Ingredients for installations
 
 - [Node](https://nodejs.org/)
 - [ffmpeg](https://ffmpeg.org/)
 - [Git](https://git-scm.com/)
 
-- ### Cloning and Installation Programs
+### Cloning and Installation Programs
 
 Clone this repository:
 
@@ -165,7 +167,7 @@ You can [visit here.](https://www.npmjs.com/)
 > npm uninstall <package name>
 ```
 
-- ### Start Program in terminal:
+### Start Program in terminal:
 
 Start program:
 
@@ -198,17 +200,17 @@ You can see for Examples of pm2 in [Here](https://www.npmjs.com/package/pm2)
 > pm2 monit
 ```
 
-- ### Contant us
+### Contant us
 
 if you have a problem, please [Contant me](https://wa.me/6285161422971)
 Enjoyy...
 
-- ## Donate
+## Donate
 
 - [Saweria](https://saweria.co/cakrayp)
 - [Trakterr](https://trakteer.id/cakrayp)
 
-- ## thanks for
+## thanks for
 
 - [Nurutomo](https://github.com/Nurutomo)
 - [sekhaa](https://github.com/inirey)
