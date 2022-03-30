@@ -50,7 +50,6 @@
     "pino": "^7.6.5",
     "request": "^2.88.2",
     "spinnies": "^0.3.2",
-    "ssweb-api": "github:caliph91/ssweb-api",
     "systeminformation": "^5.11.8",
     "tinyurl": "^1.1.7",
     "translate-google": "^1.5.0",
