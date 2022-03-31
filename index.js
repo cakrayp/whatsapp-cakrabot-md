@@ -80,12 +80,6 @@ async function startSock() {
          * it must use Array every whatsapp web version, E.g: [2, 2204, 13]
          *  */
         version: await checkVersion(),
-
-        getMessage: async (key) => {
-            return {
-                conversation: 'hello Everyone'
-            }
-        }
     })
 
 

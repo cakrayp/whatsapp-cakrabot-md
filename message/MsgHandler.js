@@ -390,14 +390,14 @@ module.exports = async (cakrayp, store, msg) => {
             })
             const command_Type_result = command_Type[__position_txt].originalText
             if (language == 'en') {
-                return messageHandler[command_Type_result].eng
+                return messageHandler[command_Type_result]?.eng
             } else if (language == 'id') {              //  Message text for a language text
-                return messageHandler[command_Type_result].ind
+                return messageHandler[command_Type_result]?.ind
             } else if (language == 'all') {
                 if (isIndonesian) {
-                    return messageHandler[command_Type_result].ind
+                    return messageHandler[command_Type_result]?.ind
                 } else {
-                    return messageHandler[command_Type_result].eng
+                    return messageHandler[command_Type_result]?.eng
                 }
             } else {
                 throw new Error(`This ${language} is not avaiable`)
