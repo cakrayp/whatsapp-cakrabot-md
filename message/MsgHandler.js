@@ -1177,15 +1177,14 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 }
                 break
             case 'otagall':
-            case 'tagall':
                 if (!isGroup) return reply(commannd_response('groupOnly'))
-                if (!isGroupAdmins || !isOwner) return reply(commannd_response('admin_owner'))
-                let group_data_tagall = await cakrayp.groupMetadata(from)
-                let participants_ = group_data_tagall.participants
+                if (!isOwner) return reply(commannd_response('admin_owner'))
+                var group_data_tagall = await cakrayp.groupMetadata(from)
+                var participants_ = group_data_tagall.participants
                 txt_tagged = messagesText ? `*Message :* ${messagesText}\n\n` : ''
                 txt_tagged += '┌──「 Mention ALL 」\n'
                 txt_tagged += `├ Totally : ${participants_.length}\n│\n`
-                let arr_mem = []
+                var arr_mem = []
                 for (let mem of participants_) {
                     txt_tagged += `├➢ @${mem.id.split('@')[0]}\n`
                     arr_mem.push(mem.id)
@@ -1198,11 +1197,44 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                     }
                 })
                 break
+            case 'tagall':
+                if (!isGroup) return reply(commannd_response('groupOnly'))
+                if (!isGroupAdmins) return reply(commannd_response('admin_owner'))
+                var group_data_tagall = await cakrayp.groupMetadata(from)
+                var participants_ = group_data_tagall.participants
+                txt_tagged = messagesText ? `*Message :* ${messagesText}\n\n` : ''
+                txt_tagged += '┌──「 Mention ALL 」\n'
+                txt_tagged += `├ Totally : ${participants_.length}\n│\n`
+                var arr_mem = []
+                for (let mem of participants_) {
+                    txt_tagged += `├➢ @${mem.id.split('@')[0]}\n`
+                    arr_mem.push(mem.id)
+                }
+                txt_tagged += `│\n└──「 ${Bot_Name} 」`
+                cakrayp.sendMessage(from, {
+                    text: txt_tagged,
+                    contextInfo: {
+                        mentionedJid: arr_mem
+                    }
+                })
+                break
+            case 'ohidetag':
+                if (!isGroup) return reply(commannd_response('groupOnly'))
+                if (!isOwner) return reply(commannd_response('admin_owner'))
+                var group_data_hidetag = await cakrayp.groupMetadata(from)
+                var participants_list = group_data_hidetag.participants;
+                cakrayp.sendMessage(from, {
+                    text: messagesText ? messagesText : '',
+                    contextInfo: {
+                        mentionedJid: participants_list.map((memb) => memb.id)
+                    }
+                })
+                break
             case 'hidetag':
                 if (!isGroup) return reply(commannd_response('groupOnly'))
-                if (!isGroupAdmins || !isOwner) return reply(commannd_response('admin_owner'))
-                let group_data_hidetag = await cakrayp.groupMetadata(from)
-                let participants_list = group_data_hidetag.participants;
+                if (!isGroupAdmins) return reply(commannd_response('admin_owner'))
+                var group_data_hidetag = await cakrayp.groupMetadata(from)
+                var participants_list = group_data_hidetag.participants;
                 cakrayp.sendMessage(from, {
                     text: messagesText ? messagesText : '',
                     contextInfo: {
