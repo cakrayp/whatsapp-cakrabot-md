@@ -34,9 +34,9 @@ global.setFfmpegPath = true
 
 
 // Other
-global.ownerNumber = '6285161422971'   // Owner Bot, You can change to your phone number without "+" and "-"
-global.ownerName = 'Cakra Yp'   // Owner name
-global.BotName = 'CAKRA BOT'   // Bot Name
+global.ownerNumber = '6281390492911'   // Owner Bot, You can change to your phone number without "+" and "-"
+global.ownerName = 'Rifatp'   // Owner name
+global.BotName = 'RIFAT BOT'   // Bot Name
 global.prefix = '/'   // Set prefix command
 global.language = 'all'  //  You can change this language for all text with "all" --> ['id', 'en', 'all']
 global.BotImage = fs.readFileSync('./file/img/CakraBot.png')  //  You can change this bot images  <Buffer>
@@ -47,7 +47,7 @@ global.website = 'https://cakrajihan.wordpress.com/'
 global.qrcode_donate = ''
 global.not_ppuser = fs.readFileSync('./file/img/no_ppuser.jpeg')  // You can change this image <Buffer>, if it user isn't using profile picture.
 global.lib_package = '@adiwajshing/baileys-md (multi-device)'  // Package name Type for library
-global.author = 'Cakrayp'  // Author name
+global.author = 'RifatBot'  // Author name
 global.messageHandler = {
     error: {
       ind: "Mohon maaf fitur ini sedang *Error*, Silahkan dicoba lagi nanti atau dicoba yang lain.",
