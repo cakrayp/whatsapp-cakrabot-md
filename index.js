@@ -106,7 +106,7 @@ async function startSock() {
             const statusCode = new Boom(lastDisconnect?.error)?.output.statusCode
 
             if (statusCode == undefined) { log('Connection closed, as server is down, retrying in 30 seconds...'); setTimeout(() => startSock(), 30000) }
-            else if (statusCode === DisconnectReason.badSession) { log(`Bad session file, it will be automatically deleted file from  "${WHATSAPP_SESSION_PATH}" and run again`); fs.unlinkSync(WHATSAPP_SESSION_PATH); process.exit(); }
+            else if (statusCode === DisconnectReason.badSession) { log(`Bad session file, it will be automatically deleted file from  "${WHATSAPP_SESSION_PATH}" and run again`); process.exit(); }
             else if (statusCode === DisconnectReason.connectionClosed) { log('Connection closed, reconnecting....'); startSock() }
             else if (statusCode === DisconnectReason.connectionLost) { log('Connection lost, reconnecting....'); startSock() }
             else if (statusCode === DisconnectReason.connectionReplaced) { log('Connection Replaced, Another New Session Opened, Please Close Current Session First'); process.exit() }
@@ -120,6 +120,8 @@ async function startSock() {
                 color(moment().format('DD/MM/YY HH:mm:ss'), '#A1FFCE'),
                 color(`${BotName ? BotName : 'Client'} is now Connected...`, '#38ef7d')
             );
+            const { checkExpired } = require('./lib/expired')
+            setInterval(() => checkExpired(sock), 1000)
         }
     })
 

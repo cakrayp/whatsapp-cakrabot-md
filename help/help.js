@@ -1,7 +1,6 @@
 const fs = require('fs')
 const { color } = require('../lib/color')
-const moment = require('moment-timezone')
-const timezone_update = moment(Date.now()).tz('Asia/Jakarta').format('DD-MM-YY HH:mm:ss')
+require('../settings')
 
 exports.listmenuBot = (prefix) => {
     return `
@@ -14,7 +13,7 @@ exports.listmenuBot = (prefix) => {
 ├ • *${prefix}ping*
 ├ • *${prefix}aboutbot*
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listislami = (prefix) => {
@@ -31,7 +30,7 @@ exports.listislami = (prefix) => {
 ├ • *${prefix}kisahnabi* [nama_nabi]
 ├ • *${prefix}jadwalsholat* [daerah]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listdownloader = (prefix) => {
@@ -54,7 +53,7 @@ exports.listdownloader = (prefix) => {
 ├ • *${prefix}mediafire* [url_mediafire]
 ├ • *${prefix}zippyshare* [url_zippyshare]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listsearch = (prefix) => {
@@ -72,7 +71,7 @@ exports.listsearch = (prefix) => {
 ├ • *${prefix}stickerwa* [query]
 ├ • *${prefix}playstore* [query]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listrandom = (prefix) => {
@@ -90,7 +89,7 @@ exports.listrandom = (prefix) => {
 ├ • *${prefix}bucin*
 ├ • *${prefix}randomnama*
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listmanga = (prefix) => {
@@ -101,7 +100,7 @@ exports.listmanga = (prefix) => {
 ├ • *${prefix}manga* [query]
 ├ • *${prefix}kusonimesearch* [query] 
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listgoogle = (prefix) => {
@@ -111,7 +110,7 @@ exports.listgoogle = (prefix) => {
 ├ • *${prefix}translate* [kode_negara] [text]
 ├ • *${prefix}gtts* [kode_negara] [text]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listinfomation = (prefix) => {
@@ -122,6 +121,7 @@ exports.listinfomation = (prefix) => {
 ├ • *${prefix}heroml* [hero_name]
 ├ • *${prefix}ssweb* [link]
 ├ • *${prefix}shortlink* [link]
+├ • *${prefix}checkshort* [short link]
 ├ • *${prefix}getpic* [number or tag-member]
 ├ • *${prefix}cnnindonesia*
 ├ • *${prefix}cnnnasional*
@@ -129,7 +129,7 @@ exports.listinfomation = (prefix) => {
 ├ • *${prefix}infogempa*
 ├ • *${prefix}lirik* [query]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listentertaiment = (prefix) => {
@@ -140,7 +140,7 @@ exports.listentertaiment = (prefix) => {
 ├ • *${prefix}tebakgambar*
 ├ • *${prefix}caklontong*
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listmedsos = (prefix) => {
@@ -151,7 +151,7 @@ exports.listmedsos = (prefix) => {
 ├ • *${prefix}githubstalk*
 ├ • *${prefix}ytstalk*
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listmetadata = (prefix) => {
@@ -163,7 +163,7 @@ exports.listmetadata = (prefix) => {
 ├ • *${prefix}bahasa / language*
 ├ • *${prefix}listblock*
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listcreator = (prefix) => {
@@ -175,7 +175,7 @@ exports.listcreator = (prefix) => {
 ├ • *${prefix}emoji* (emote to sticker)
 ├ • *${prefix}emojimix* (emote to sticker)
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listconvert = (prefix) => {
@@ -189,7 +189,7 @@ exports.listconvert = (prefix) => {
 ├ • *${prefix}towebp* (media to WebP)
 ├ • *${prefix}tourl* (media to URLs)
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listAdminGroup = (prefix) => {
@@ -211,7 +211,7 @@ exports.listAdminGroup = (prefix) => {
 ├ • *${prefix}setgrouppic* (send photo with caption)
 ├ • *${prefix}setgroupchange* (Open and Close)
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listgroup = (prefix) => {
@@ -224,7 +224,7 @@ exports.listgroup = (prefix) => {
 ├ • *${prefix}welcome* (for every the participant was added)
 ├ • *${prefix}antilink* (for a detection group link)
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listOwner = (prefix) => {
@@ -246,7 +246,7 @@ exports.listOwner = (prefix) => {
 ├ • *${prefix}addblock* [number or tag member]
 ├ • *${prefix}unblock* [number or tag member]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listprimbon = (prefix) => {
@@ -259,7 +259,7 @@ exports.listprimbon = (prefix) => {
 ├ • *${prefix}weton* [tanggal bulan tahun]
 ├ • *${prefix}jadian* [tanggal bulan tahun]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listtextpro = (prefix) => {
@@ -316,7 +316,7 @@ exports.listtextpro = (prefix) => {
 ├ • *${prefix}steel3d* [text1 & text2]
 ├ • *${prefix}wallgravity* [text1 & text2]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listphotoxy = (prefix) => {
@@ -347,7 +347,7 @@ exports.listphotoxy = (prefix) => {
 ├ • *${prefix}battlefield* [text1 & text2]
 ├ • *${prefix}pubg* [text1 & text2]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listephoto = (prefix) => {
@@ -385,7 +385,7 @@ exports.listephoto = (prefix) => {
 ├ • *${prefix}silverplaybutton* [text]
 ├ • *${prefix}freefire* [text]
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.listrandomimage = (prefix) => {
@@ -402,6 +402,7 @@ exports.listrandomimage = (prefix) => {
 ├ • *${prefix}couple*
 ├ • *${prefix}husbu*
 ├ • *${prefix}sagiri*
+├ • *${prefix}couple*
 ├ • *${prefix}shinobu*
 ├ • *${prefix}megumin*
 ├ • *${prefix}pentol*
@@ -410,21 +411,21 @@ exports.listrandomimage = (prefix) => {
 ├ • *${prefix}feed*
 ├ • *${prefix}trap*
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.mysosmed = (prefix, owner, apiCakra) => {
     return `
 「 Social Media 」
 
-• *Website :* https://cakrajihan.wordpress.com
+• *Website :* ${website ? website : "(Nothing)"}
 • *Blogger :* https://cakraypjhn.blogspot.com
-• *Rest API :* ${apiCakra}
+• *Rest API :* ${RestApi ? RestApi : "(Nothing)"}
 • *Instagram :* https://instagram.com/cakrayp_jhn
 • *TeleBot :* https://t.me/Information341_bot
 • *Owner :* https://wa.me/${owner}
 
-「 CAKRA BOT 」
+「 ${BotName} 」
 
 Don't forget to follow my instagram
 if donate, type *${prefix}donate*
@@ -435,22 +436,20 @@ exports.donate = () => {
     return `*-------「 QRIS 」 -------*
 
 Hai kak ☺️ 
-Kalian bisa mendukung saya agar bot ini tetap up to date dengan cara donasi
+Kalian bisa mendukung saya agar bot ini tetap up to date dengan cara donasi agar tetap semangat update.
 
 Berapapun donasi kalian akan sangat berarti 👍
 
-*Note:*
-Kartu operator By.U juga dapat mengirim/transfer pulsa dengan operator sesama dengan telkomsel.
-
 ┌──「 Donate 」
 │
-├ • *No :* 085161422971 (By.U)
+├ • *Method :* (Dana/OVO/Gopay/ShopeePay)
+├ • *No :* 085161422971 (Cakra Yp)
 │
 ├ *Website*
 ├ • *Saweria :* https://saweria.co/cakrayp
 ├ • *Trakter :* https://trakteer.id/cakrayp
 │
-└──「 CAKRA BOT 」
+└──「 ${BotName} 」
     `.trim()
 }
 exports.sourceCode = (prefix, ownerNumber, isIndonesian) => {

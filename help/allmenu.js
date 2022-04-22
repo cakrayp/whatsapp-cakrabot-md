@@ -69,6 +69,42 @@ module.exports = (pushname, isIndonesian, lang, salam, time, prefix) => {
 ├ *${prefix}group* <open/close>
 ├ *${prefix}hidetag* <text>
 │
+├──「 DOWNLOADER 」
+├ • *${prefix}ytplay* [query] (for video)
+├ • *${prefix}play* [query] (for audio)
+├ • *${prefix}ytmp3* [url_video]
+├ • *${prefix}ytmp4* [url_video]
+├ • *${prefix}tiktoknowm* [url_video]
+├ • *${prefix}tiktokmusic* [url_video]
+├ • *${prefix}igstory* [username]
+├ • *${prefix}igfeed* [url_post]
+├ • *${prefix}fbdl* [url_video]
+├ • *${prefix}jooxplay* [query]
+├ • *${prefix}pinterestdl* [url_pinterest]
+├ • *${prefix}mediafire* [url_mediafire]
+├ • *${prefix}zippyshare* [url_zippyshare]
+│
+├──「 PRIMBON 」
+├ • *${prefix}artinama* [name]
+├ • *${prefix}kecocokannama* [name tanggallhir]
+├ • *${prefix}jodoh* [name anda & name pasangan] 
+├ • *${prefix}weton* [tanggal bulan tahun]
+├ • *${prefix}jadian* [tanggal bulan tahun]
+│
+├──「 Converter 」
+├ • *${prefix}sticker* (image/video to stiker)
+├ • *${prefix}toimg* (stiker to image)
+├ • *${prefix}tomp4* (WebP to video)
+├ • *${prefix}tomp3* (video to audio)
+├ • *${prefix}towebp* (media to WebP)
+├ • *${prefix}tourl* (media to URLs)
+│
+├──「 Creator 」
+├ • *${prefix}ttp* [text]
+├ • *${prefix}attp* [text]
+├ • *${prefix}emoji* (emote to sticker)
+├ • *${prefix}emojimix* (emote to sticker)
+│
 ├「 RANDOM-TEXT 」
 ├ *${prefix}quotes*
 ├ *${prefix}quotesdilan*
@@ -90,6 +126,7 @@ module.exports = (pushname, isIndonesian, lang, salam, time, prefix) => {
 ├ *${prefix}waifu*
 ├ *${prefix}shota*
 ├ *${prefix}husbu*
+├ *${prefix}couple*
 ├ *${prefix}sagiri*
 ├ *${prefix}shinobu*
 ├ *${prefix}megumin*

@@ -26,6 +26,7 @@ const mimetype = require('mimetype')
 const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const os = require('os')
+const toMs = require('ms')
 const feedid = require('feedid')
 const ffmpeg = require("fluent-ffmpeg")
 require('../settings')
@@ -64,6 +65,7 @@ const {
     scrape,
     instagram,
     expands,
+    textmaker,
     ezgif,
     filesizeProgram,
     primbon,
@@ -86,6 +88,7 @@ setFfmpegPath ? ffmpegPath : 'ffmpeg'   // You can set in file ../settings
 
 // ------>  Database  <------
 const challenge = JSON.parse(fs.readFileSync('./database/challenge.json'))
+const sewagroup_ = JSON.parse(fs.readFileSync('./database/sewa/group.json'))
 const welcome_ = JSON.parse(fs.readFileSync('./database/group/welcome.json'))
 const antilink_ = JSON.parse(fs.readFileSync('./database/group/antilink.json'))
 const banned_ = JSON.parse(fs.readFileSync('./database/banned.json'))
@@ -109,20 +112,39 @@ async function sleep(ms) {
 }
 
 // database Array
-kickall = [];
+var kickall = [];
+
+
+// Timeout for database Array...
+function sessionArraycheck(arr = []) {
+    setInterval(() => {
+        let arrdb__ = arr;
+        let position = false
+        Object.keys(arrdb__).forEach((i) => {
+            if (arrdb__[i].expired >= Date.now()) {
+                position = i
+            }
+        })
+        if (position !== false) {
+            arrdb__.splice(position, 1)
+        }
+    }, 1000);
+}
+sessionArraycheck(kickall)
 
 module.exports = async (cakrayp, store, msg) => {
     try {
         // if (m.key.fromMe) return      because it has been placed in file ../index.js
-        if (msg.message?.protocolMessage) return;
-        if (!msg.message) return;       // without message Object...
-        const time = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('DD-MM-YY HH:mm:ss')
+        if (!msg.message) return;                   // without message Object...
+        if (msg.message?.protocolMessage) return;   // remoteJid: "status@broadcast"
+        if (msg.key.remoteJid == "status@broadcast") return;
+        const time = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('DD/MM/YYYY HH:mm:ss')
         const ucapan = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a')
         const fromMe = msg.key.fromMe
         const content = JSON.stringify(msg.message)
         const from = msg.key.remoteJid
         const type = Object.keys(msg.message)[0]
-        const chats = (type === 'conversation' || type == 'senderKeyDistributionMessage' && msg.message.conversation) ? msg.message.conversation : (type == 'imageMessage') && msg.message.imageMessage.caption ? msg.message.imageMessage.caption : (type == 'documentMessage') && msg.message.documentMessage.caption ? msg.message.documentMessage.caption : (type == 'videoMessage') && msg.message.videoMessage.caption ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') && msg.message.extendedTextMessage.text ? msg.message.extendedTextMessage.text : (type == 'buttonsResponseMessage' || type == 'messageContextInfo' && msg.message.buttonsResponseMessage.selectedButtonId) ? msg.message.buttonsResponseMessage.selectedButtonId : (type == 'templateButtonReplyMessage') && msg.message.templateButtonReplyMessage.selectedId ? msg.message.templateButtonReplyMessage.selectedId : (type === 'listResponseMessage' && msg.message.listResponseMessage.title) ? msg.message.listResponseMessage.title : ""
+        const chats = (type === 'conversation' || type == 'senderKeyDistributionMessage' && msg.message.conversation) ? msg.message.conversation : (type == 'imageMessage') && msg.message.imageMessage.caption ? msg.message.imageMessage.caption : (type == 'documentMessage') && msg.message.documentMessage.caption ? msg.message.documentMessage.caption : (type == 'videoMessage') && msg.message.videoMessage.caption ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') && msg.message.extendedTextMessage.text ? msg.message.extendedTextMessage.text : (type == 'buttonsResponseMessage' || type == 'messageContextInfo' && !fromMe && msg.message.buttonsResponseMessage.selectedButtonId) ? msg.message.buttonsResponseMessage.selectedButtonId : (type == 'templateButtonReplyMessage') && msg.message.templateButtonReplyMessage.selectedId ? msg.message.templateButtonReplyMessage.selectedId : (type === 'listResponseMessage' && msg.message.listResponseMessage.title) ? msg.message.listResponseMessage.title : ""
         const prefix = prefix_command(chats)
         const cmd = (type === 'listResponseMessage' && msg.message.listResponseMessage.title) ? msg.message.listResponseMessage.title : (type === 'buttonsResponseMessage' && msg.message.buttonsResponseMessage.selectedButtonId) ? msg.message.buttonsResponseMessage.selectedButtonId : (type === 'conversation' && msg.message.conversation.startsWith(prefix)) ? msg.message.conversation : (type == 'imageMessage') && msg.message.imageMessage.caption.startsWith(prefix) ? msg.message.imageMessage.caption : (type == 'videoMessage') && msg.message.videoMessage.caption.startsWith(prefix) ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') && msg.message.extendedTextMessage.text.startsWith(prefix) ? msg.message.extendedTextMessage.text : ""
         const command = chats.toLowerCase().slice(1).trim().split(/ +/).shift()
@@ -136,6 +158,7 @@ module.exports = async (cakrayp, store, msg) => {
         const botNumber = cakrayp.user.id.split(':')[0] + '@s.whatsapp.net'
         const botProfile = setBotProfileSelf ? await getBuffer(await cakrayp.profilePictureUrl(botNumber, 'image')) ? await getBuffer(await cakrayp.profilePictureUrl(botNumber, 'image')) : fs.readFileSync('./file/img/no_ppuser.jpeg') : BotImage
         const Bot_Name = BotName || cakrayp.user.name
+        const qris_donate = qrcode_donate ? isUrl(qrcode_donate) ? getBuffer(qrcode_donate) : qrcode_donate : botProfile;
         const groupMetadata = isGroup ? await cakrayp.groupMetadata(from) : ''
         const groupName = groupMetadata.subject
         const groupMembers = isGroup ? groupMetadata.participants : ''
@@ -218,20 +241,28 @@ module.exports = async (cakrayp, store, msg) => {
 
         const translate = async (teks, lang) => {
             return new Promise((resolve, reject) => {
-                translate_google(teks, { to: lang ? lang : 'en' })
-                    .then(resolve)
-                    .catch(reject)
+                const isSupported_language = translate_google.languages.isSupported(lang)
+                if (isSupported_language) {
+                    translate_google(teks, { to: lang ? lang?.toLowerCase() : 'en' })
+                        .then(resolve)
+                        .catch(reject)
+                } else {
+                    err = new Error(`This code of ${lang} is not supported!`)
+                    err.code = 404
+                    reject(err)
+                }
             })
         }
 
         const checkLanguageCode = (code) => {
-            const language_code = [
-                "af", "ar", "sq", "hy", "ca", "zh", "zh-cn", "zh-tw", "zh-yue", "hr", "cs", "da", "nl",
-                "en", "en-uk", "en-uk", "en-us", "eo", "fi", "fr", "de", "el", "ht", "hi", "hu", "is", "id",
-                "it", "ja", "ko", "la", "lv", "mk", "no", "pl", "pt", "pt-br", "ro", "ru", "sr", "sk", "es",
-                "es-es", "es-us", "sw", "sv", "ta", "th", "tr", "vi", "cy"
-            ]
-            return language_code.includes(code.toLowerCase())
+            // const language_code = [
+            //     "af", "ar", "sq", "hy", "ca", "zh", "zh-cn", "zh-tw", "zh-yue", "hr", "cs", "da", "nl",
+            //     "en", "en-uk", "en-uk", "en-us", "eo", "fi", "fr", "de", "el", "ht", "hi", "hu", "is", "id",
+            //     "it", "ja", "ko", "la", "lv", "mk", "no", "pl", "pt", "pt-br", "ro", "ru", "sr", "sk", "es",
+            //     "es-es", "es-us", "sw", "sv", "ta", "th", "tr", "vi", "cy"
+            // ]
+            // return language_code.includes(code.toLowerCase())
+            return translate_google.languages.isSupported(code) ? true : false
         }
 
         // Add database with function
@@ -617,7 +648,7 @@ module.exports = async (cakrayp, store, msg) => {
 
         // Message Buttons
         const templateButtons_menu = [
-            { index: 1, urlButton: { displayText: '⭐ Rest API!', url: 'https://cakrayp.herokuapp.com/' } },
+            { index: 1, urlButton: { displayText: '⭐ Rest API!', url: RestApi } },
             { index: 2, callButton: { displayText: 'Contact', phoneNumber: `+${ownerNumber}` } },
             { index: 3, quickReplyButton: { displayText: 'Menu', id: `${prefix}cmd` } },
             { index: 4, quickReplyButton: { displayText: 'Allmenu', id: `${prefix}allmenu` } },
@@ -972,7 +1003,7 @@ don't forget to follow my account
 ├ • *Blogger :*
 ├ https://cakraypjhn.blogspot.com
 ├ • *Rest API :*
-├ ${apiCakra}
+├ ${RestApi}
 ├ • *Instagram :*
 ├ https://instagram.com/cakrayp_jhn
 ├ • *TeleBot :*
@@ -981,9 +1012,44 @@ don't forget to follow my account
 └──「 ${Bot_Name} 」
 `.trim()
                 cakrayp.sendMessage(from, {
-                    image: botProfile,
+                    image: qris_donate,
                     jpegThumbnail: botProfile,
                     caption: mysosmed
+                })
+                break
+            // Sewa
+            case 'sewa':
+                myteksSewa = `
+*「 SEWA BOT 」*
+
+_*Hi sob*_
+
+Memasukkan dalam group dengan harga:
+*13k* Perbulan.
+*20k* 2 Bulan.
+*58k* 5 Bulan.
+
+Bisa diperpanjang sebelum terbatas harus *dibayar* lagi, sertakan link group tersebut agar dapat diperpanjang.
+kalo tidak diperpanjang otomatis bot tersebut akan keluar dari group setelah terbatas.
+
+
+*Cara melakukan pembayaran.*
+- Bisa melalui di aplikasi seperti dompet digital Elektronik (E-Wallet) seperti Dana/OVO/ShopeePay dan Dll.
+- Bisa melalui topUp dari pembayaran kasir, khusus jika tidak punya KTP, (harus ada struk bukti pembayaran).
+
+*Metode Pembayaran*
+- Dana
+- ShopeePay
+- LinkAja
+
+No: 085161422971 (Cakra)
+
+*Note:* harap kirim bukti pembayaran setelah melakukan pembayaran, agar tidak kesalahpahaman.
+`.trim()
+                cakrayp.sendMessage(from, {
+                    image: qris_donate,
+                    jpegThumbnail: botProfile,
+                    caption: myteksSewa
                 })
                 break
 
@@ -1258,7 +1324,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                     if (messagesText.length > 18) return reply(language_text('Mohon maaf nomor ini telah melebihi 18 karakter', 'Sorry, this number has exceeded 18 characters'))
                     if (messagesText.length < 6) return reply(language_text('Mohon maaf nomor ini tidak melebihi 18 karakter', 'Sorry, this number does not exceed 18 characters'))
                     await cakrayp.updateBlockStatus(`${messagesText}@s.whatsapp.net`, command);
-                    reply(language_text(`Berhasil ${command == 'block' ? 'blok' : 'Membuka blok'} target tersebut.`, `Successfully to ${commnnd} target.`))
+                    reply(language_text(`Berhasil ${command == 'block' ? 'blok' : 'Membuka blok'} target tersebut.`, `Successfully to ${command} target.`))
                 }
                 break
             case 'addbanned':
@@ -1572,7 +1638,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 if (!isOwner) return reply(commannd_response('owner_bot'))
                 if (!messagesText) return reply(language_text(`Silahkan masukkan link group terlebih dahulu\n\nContoh: *${prefix + command}* <link gc>\n*${prefix + command}* https://chat.whatsapp.com/xxxxxx`, `Please enter the group link first\n\nE.g: *${prefix + command}* <link gc>\n*${prefix + command}* https://chat.whatsapp.com/xxxxxx`))
                 const linkGc_Regex = /(?:http(?:s):\/\/)chat.whatsapp.com\/(?:invite\/)?([0-9A-Za-z]{21,24})/i
-                if (linkGc_Regex.test(messagesText)) {
+                if (linkGc_Regex.test(args[0])) {
                     const getGroupCode = linkGc_Regex.exec(chats)[1]
                     const queryInvite = async (code) => {
                         const results = await cakrayp.query({
@@ -1588,14 +1654,26 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                     };
                     queryInvite(getGroupCode)
                         .then(async (check) => {
-                            if (check.size >= 257) return reply(language_text("Mohon maaf, group ini telah tercapai maksimal *257*", "Sorry, This group is full maximum *257*"));
                             // if (check.size < 80) return reply("The minimum requirement for group members must be more than 80 people.");
                             // Trying to join group with given invite code
-                            try {
-                                await cakrayp.groupAcceptInvite(getGroupCode)
-                                reply(language_text('Berhasil untuk bergabung di group.', 'Success to join in the group.'))
-                            } catch (err) {
-                                reply(language_text("Sepertinya grup telah penuh atau tidak valid ketika mencoba untuk bergabung :/", "Looks like the group already full or became invalid when I'm trying to join :/"));
+                            if (args[1]) {
+                                if (check.size >= 257) return reply(language_text("Mohon maaf, group ini telah tercapai maksimal *257*", "Sorry, This group is full maximum *257*"));
+                                try {
+                                    const { addDatabaseforSell } = require('../lib/expired')
+                                    addDatabaseforSell(cakrayp, check.id + '@g.us', args[1])
+                                    await cakrayp.groupAcceptInvite(getGroupCode)
+                                    reply(language_text('Berhasil untuk bergabung di group.', 'Success to join in the group.'))
+                                } catch (err) {
+                                    reply(language_text("Sepertinya grup telah penuh atau tidak valid ketika mencoba untuk bergabung :/", "Looks like the group already full or became invalid when I'm trying to join :/"));
+                                }
+                            } else {
+                                if (check.size >= 257) return reply(language_text("Mohon maaf, group ini telah tercapai maksimal *257*", "Sorry, This group is full maximum *257*"));
+                                try {
+                                    await cakrayp.groupAcceptInvite(getGroupCode)
+                                    reply(language_text('Berhasil untuk bergabung di group.', 'Success to join in the group.'))
+                                } catch (err) {
+                                    reply(language_text("Sepertinya grup telah penuh atau tidak valid ketika mencoba untuk bergabung :/", "Looks like the group already full or became invalid when I'm trying to join :/"));
+                                }
                             }
                         })
                         .catch(async () => {
@@ -1908,7 +1986,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 try {
                     var getPicFromGroup = await getBuffer(await cakrayp.profilePictureUrl(getGroupInformationFromID.id, 'image'));
                 } catch (e) {
-                    var getPicFromGroup = fs.readFileSync('./file/img/no_ppuser.jpeg')
+                    var getPicFromGroup = not_ppuser;
                 }
                 txt_infoGc = `*「 GROUP INFO 」*\n\n`
                 txt_infoGc += `*• Name :* ${nameGroupFromId}\n`
@@ -2364,6 +2442,21 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                         })
                 } else {
                     reply(language_text('Mohon maaf ini khusus untuk mediafire URL.', 'Sorry this is specific to mediafire URLs.'))
+                }
+                break
+            case 'ssweb':
+                if (isUrl(messagesText)) {
+                    getBuffer(`https://webscreenn.herokuapp.com/ssweb/desktop?url=${encodeURIComponent(messagesText)}&responsetype=image`)
+                    .then(async(get_images) => {
+                        cakrayp.sendMessage(from, {
+                            image: get_images,
+                            jpegThumbnail: get_images
+                        })
+                    }).catch(err => {
+                        reply(language_text("Mohon maaf, URL yang anda masukkan itu mungkin tidak valid, Silahkan masukkan URL yang valid", "Sorry, this URL is not valid, Pleae enter valid URL"))
+                    })
+                } else {
+                    reply(language_text('Mohon maaf ini khusus untuk link URL', 'Sorry this is special for the URL'))
                 }
                 break
 
@@ -4066,8 +4159,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 }
                 break
             case 'tomp4':
-                // Convert to Video With 'https://ezgif.com'
                 if (isQuotedSticker) {
+                    // Convert to Video With 'https://ezgif.com'
                     try {
                         reply(commannd_response('wait'))
                         let file_stream = await downloadContentFromMessage(msg.message.extendedTextMessage?.contextInfo.quotedMessage.stickerMessage, 'sticker')
