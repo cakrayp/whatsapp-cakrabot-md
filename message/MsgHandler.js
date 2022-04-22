@@ -241,9 +241,9 @@ module.exports = async (cakrayp, store, msg) => {
 
         const translate = async (teks, lang) => {
             return new Promise((resolve, reject) => {
-                const isSupported_language = translate_google.languages.isSupported(lang)
+                const isSupported_language = translate_google.languages.isSupported(lang ? lang?.toLowerCase() : 'en');
                 if (isSupported_language) {
-                    translate_google(teks, { to: lang ? lang?.toLowerCase() : 'en' })
+                    translate_google(teks, { to: lang })
                         .then(resolve)
                         .catch(reject)
                 } else {
