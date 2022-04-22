@@ -10,7 +10,7 @@
 <a href="https://github.com/cakrayp"><img title="Author" src="https://img.shields.io/badge/Author-Cakrayp-orange.svg?style=for-the-badge&logo=github"></a>
 </p>
 
-Hello everybody, hown are you all, I hope you're good.
+Hello everybody, how are you all, I hope you're good.
 So I just make this my program first.
 I have been understand all for use it and you can use it well for whatsapp bot users
 
@@ -134,11 +134,54 @@ global.messageHandler = {
 
 `FOR CLI (Command Line)`
 
-### Ingredients for installations
+### Requirement for installations
 
-- [Node](https://nodejs.org/)
-- [ffmpeg](https://ffmpeg.org/)
-- [Git](https://git-scm.com/)
+`FOR Manually Installation`
+
+### Usage for Windows/RDP (Windows server Only)
+
+- Node [`Click here`](https://nodejs.org/)
+- ffmpeg [`Click here`](https://ffmpeg.org/)
+- Git [`Click here`](https://git-scm.com/)
+
+### Usage for debian Ubuntu/linux
+
+``` bash
+> apt update
+```
+
+Install [Git](https://git-scm.com/):
+
+``` bash
+> apt install git
+```
+
+Install [ffmpeg](https://ffmpeg.org/):
+
+``` bash
+> apt install ffmpeg
+```
+
+Node JS installation:
+
+```bash
+(for default version)
+> apt install nodejs
+
+(Change nodejs version)
+You can see this for nvm Examples: "https://github.com/nvm-sh/nvm"
+
+> curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+$ nvm install 16.14.2
+$ nvm use 16.14.2
+Now using node v16.14.2 (npm v8.5.0)
+```
+
+Note:
+
+If you have a sudo command, you can write the command "`sudo apt` `<command>` `<options>`"
+
+if you do not have `curl` command, you can type the command "`apt install curl`"
 
 ### Cloning and Installation Programs
 
