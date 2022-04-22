@@ -15,10 +15,10 @@ Usage: *${prefix}emoji* berfungsi untuk setiap emotion (emoji) biasanya emoji di
 Contoh: *${prefix}emoji* ${emojirandom[Math.floor(Math.random() * emojirandom.length)]}
 
 
-3.) *${prefix}emoji* (Emoji to PNG and converter to webp)
+3.) *${prefix}emojimix* (Emoji to PNG and converter to webp)
 
-Usage: *${prefix}emoji* berfungsi untuk setiap emotion (emoji) biasanya emoji dijadikan sebuah gambar dan file akan diconvert sebagai type file image/webp (web picture) dan akan mengirimkan sebuah dalam stiker.
-Contoh: *${prefix}emoji* ${emojirandom[Math.floor(Math.random() * emojirandom.length)]}
+Usage: *${prefix}emojimix* berfungsi untuk setiap emotion (emojimix) akan digabungkan menjadi satu dalam berisi gambar dan file akan diconvert sebagai type file image/webp (web picture) dan akan mengirimkan sebuah dalam stiker.
+Contoh: *${prefix}emojimix* ${emojirandom[Math.floor(Math.random() * emojirandom.length)]}
 
 
 4.) *${prefix}ttp* [text]
@@ -45,10 +45,10 @@ Usage: *${prefix}emoji* functions for every emotion (emoji) usually emoji is mad
 E.g: *${prefix}emoji* ${emojirandom[Math.floor(Math.random() * emojirandom.length)]}
 
 
-3.) *${prefix}emoji* (Emoji to PNG and converter to webp)
+3.) *${prefix}emojimix* (Emoji to PNG and converter to webp)
 
-Usage: *${prefix}emoji* functions for every emotion (emoji) usually emoji is made into an image and the file will be converted as an image/webp (web picture) file type and will send one in a sticker.
-Example: *${prefix}emoji* ${emojirandom[Math.floor(Math.random() * emojirandom.length)]}
+Usage: *${prefix}emojimix* function for each emotion (emojimix) will be combined into one containing an image and the file will be converted as an image/webp (web picture) file type and will send a sticker.
+Example: *${prefix}emojimix* ${emojirandom[Math.floor(Math.random() * emojirandom.length)]}
 
 
 4.) *${prefix}ttp* [text]
