@@ -22,7 +22,7 @@ function execCommand(input_command) {
 module.exports = async(client, store) => {
     return new Promise(async (resolve, reject) => {
         const sender = client.user.id.split(':')[0] + '@s.whatsapp.net'
-        const name_Bot = client.user.name;
+        const name_Bot = BotName ? BotName : client.user.name ? client.user.name : "(No Name)";
         const chatPrivateCount = store.chats.filter(x => isJidUser(x.id)).length
         const chatGroupCount = store.chats.filter(x => isJidGroup(x.id)).length
         const nodeVersion = await execCommand('node -v');

@@ -158,7 +158,7 @@ module.exports = async (cakrayp, store, msg) => {
         const botNumber = cakrayp.user.id.split(':')[0] + '@s.whatsapp.net'
         const botProfile = setBotProfileSelf ? await getBuffer(await cakrayp.profilePictureUrl(botNumber, 'image')) ? await getBuffer(await cakrayp.profilePictureUrl(botNumber, 'image')) : fs.readFileSync('./file/img/no_ppuser.jpeg') : BotImage
         const Bot_Name = BotName || cakrayp.user.name
-        const qris_donate = qrcode_donate ? isUrl(qrcode_donate) ? getBuffer(qrcode_donate) : qrcode_donate : botProfile;
+        const qris_donate = qrcode_donate ? isUrl(qrcode_donate) ? await getBuffer(qrcode_donate) : qrcode_donate : botProfile;
         const groupMetadata = isGroup ? await cakrayp.groupMetadata(from) : ''
         const groupName = groupMetadata.subject
         const groupMembers = isGroup ? groupMetadata.participants : ''
@@ -1228,6 +1228,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                     const getMediaMessageTypeOfBroadcast = Object.keys(type == 'extendedTextMessage' ? msg.message.extendedTextMessage?.contextInfo.quotedMessage : msg.message)[0]
                     const getMediaMetaBuff = await downloadMediaMessageWithBuffer(msg.message[getMediaMessageTypeOfBroadcast] || msg.message.extendedTextMessage?.contextInfo.quotedMessage[getMediaMessageTypeOfBroadcast], getMediaMessageTypeOfBroadcast.replace("Message", ""))
                     for (let Jid of list_chats_user) {
+                        if (Jid == "status@broadcast") return;
                         let makeToSendMessagesObject = {};
                         makeToSendMessagesObject[getMediaMessageTypeOfBroadcast.replace("Message", "")] = getMediaMetaBuff;     //  Make this Object { image/video: <buffer> }
                         makeToSendMessagesObject['caption'] = `*「 Broadcast 」*\n\n${messagesText ? messagesText : "No Messages"}\n\n© Made by ${author}`;
@@ -1236,6 +1237,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 } else {
                     if (!messagesText) return reply(language_text(`Silakan masukkan text atau kirim foto/video yang akan dikirimkan ke semua chat\n\nContoh: *${prefix + command}* <text>\n*${prefix + command}* hello world`, `Please enter text or send a photo/video that will be sent to all chats\n\nExample: *${prefix + command}* <text>\n*${prefix + command}* hello world`))
                     for (let Jid of list_chats_user) {
+                        if (Jid == "status@broadcast") return;
                         cakrayp.sendMessage(Jid, {
                             text: `*「 Broadcast 」*\n\n${messagesText ? messagesText : "No Messages"}\n\n© Made by ${author}`
                         })
@@ -1538,7 +1540,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 break
             case 'opromote':
                 if (!isGroup) return reply(commannd_response('groupOnly'))
-                if (!isGroupAdmins) return reply(commannd_response('admingroup'))
+                if (!isOwner) return reply(commannd_response('owner_bot'))
                 if (!isBotGroupAdmins) return reply(commannd_response('bot_admingroup'))
                 if (msg.message.extendedTextMessage === null || msg.message.extendedTextMessage.contextInfo.mentionedJid === undefined) return mentions(language_text(`Silakhan di tag user dari target digroup\n\nContoh: *${prefix + command}* @${sender.split('@')[0]}`, `Please tag user from target in group\nExample: *${prefix + command}* @${sender.split('@')[0]}`), [sender], true)
                 var mentionedJid_promote = msg.message.extendedTextMessage.contextInfo.mentionedJid;
@@ -1560,7 +1562,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 break
             case 'odemote':
                 if (!isGroup) return reply(commannd_response('groupOnly'))
-                if (!isGroupAdmins) return reply(commannd_response('admingroup'))
+                if (!isOwner) return reply(commannd_response('owner_bot'))
                 if (!isBotGroupAdmins) return reply(commannd_response('bot_admingroup'))
                 if (msg.message.extendedTextMessage === null || msg.message.extendedTextMessage.contextInfo.mentionedJid === undefined) return mentions(language_text(`Silakhan di tag user dari target digroup\n\nContoh: *${prefix + command}* @${sender.split('@')[0]}`, `Please tag user from target in group\nExample: *${prefix + command}* @${sender.split('@')[0]}`), [sender], true)
                 var mentionedJid_demote = msg.message.extendedTextMessage.contextInfo.mentionedJid;
@@ -1590,7 +1592,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 break
             case 'oleave':
                 if (!isGroup) return reply(commannd_response('groupOnly'))
-                if (!isGroupAdmins) return reply(commannd_response('admingroup'))
+                if (!isOwner) return reply(commannd_response('owner_bot'))
                 if (messagesText == 'en') {
                     lang_leave = 'This bot was ordered to leave the group by the owner'
                     lang_leave2 = 'Thank you for using the bot, and don\'t forget to come back again :)'
@@ -1616,7 +1618,28 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             case 'del':
             case 'delete':
                 if (!isGroup) return reply(commannd_response('groupOnly'))
-                if (!isGroupAdmins || !isOwner) return reply(commannd_response('admin_owner'))
+                if (!isGroupAdmins) return reply(commannd_response('admingroup'))
+                if (!isBotGroupAdmins) return reply(commannd_response('bot_admingroup'))
+                if (msg.message.extendedTextMessage?.contextInfo.participant == botNumber) {
+                    cakrayp.sendMessage(from, {
+                        delete: {
+                            remoteJid: from,
+                            fromMe: true,
+                            id: msg.message.extendedTextMessage.contextInfo.stanzaId,
+                            participant: botNumber
+                        }
+                    })
+                } else {
+                    reply(language_text(
+                        'Mohon maaf, pesan user (pengguna) ini tidak dapat dihapus dikarenakan sebagai khusus untuk pesan bot, Silahkan direply untuk menghapus pesan bot ini',
+                        'Sorry, this user message cannot be deleted due to specifically for a bot message, please reply to delete this bot message'
+                    ))
+                }
+                break
+            case 'odel':
+            case 'odelete':
+                if (!isGroup) return reply(commannd_response('groupOnly'))
+                if (!isOwner) return reply(commannd_response('owner_bot'))
                 if (!isBotGroupAdmins) return reply(commannd_response('bot_admingroup'))
                 if (msg.message.extendedTextMessage?.contextInfo.participant == botNumber) {
                     cakrayp.sendMessage(from, {
@@ -1659,8 +1682,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                             if (args[1]) {
                                 if (check.size >= 257) return reply(language_text("Mohon maaf, group ini telah tercapai maksimal *257*", "Sorry, This group is full maximum *257*"));
                                 try {
-                                    const { addDatabaseforSell } = require('../lib/expired')
-                                    addDatabaseforSell(cakrayp, check.id + '@g.us', args[1])
+                                    // const { addDatabaseforSell } = require('../lib/expired')
+                                    // addDatabaseforSell(cakrayp, check.id + '@g.us', args[1])
                                     await cakrayp.groupAcceptInvite(getGroupCode)
                                     reply(language_text('Berhasil untuk bergabung di group.', 'Success to join in the group.'))
                                 } catch (err) {
@@ -2445,6 +2468,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 }
                 break
             case 'ssweb':
+                if (!messagesText) return reply(Language_code(`Silahkan masukkan URL yang akan di screenshot\n\nContoh: *${prefix + command}* <URL>\n*${prefix + command}* ${RestApi}`, `Please enter the URL to be screenshot\n\nExamples: *${prefix + command}* <URL>\n*${prefix + command}* ${RestApi}`))
                 if (isUrl(messagesText)) {
                     getBuffer(`https://webscreenn.herokuapp.com/ssweb/desktop?url=${encodeURIComponent(messagesText)}&responsetype=image`)
                     .then(async(get_images) => {
