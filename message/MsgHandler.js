@@ -100,10 +100,11 @@ function prefix_command(chats) {
     function randomArr(arr) {   // (Random prefix if it use a "multi prefix")
         return arr[Math.floor(Math.random() * arr.length)]
     }
+    if (/@[0-9]+/.test(chats)) return
     if (multi) {
         var multi_prefix = /^[°zZ#$@+,.?=''():√%!¢£¥€π¤ΠΦ_&<`™©®Δ^βα¦|/\\©^]/.test(chats) ? chats.match(/^[°zZ#$@+,.?=''():√%¢£¥€π¤ΠΦ_&<!`™©®Δ^βα¦|/\\©^]/gi) : randomArr(['.', '/', '#', '$']);
     } else {
-        var multi_prefix = prefix
+        var multi_prefix = chats.startsWith(prefix) ? prefix : false
     }
     return multi_prefix
 }
@@ -121,7 +122,7 @@ function sessionArraycheck(arr = []) {
         let arrdb__ = arr;
         let position = false
         Object.keys(arrdb__).forEach((i) => {
-            if (arrdb__[i].expired >= Date.now()) {
+            if (Date.now() >=arrdb__[i].expired) {
                 position = i
             }
         })
@@ -626,7 +627,7 @@ module.exports = async (cakrayp, store, msg) => {
                 }
             }
         }
-        if (/^a(s|ss)alamu('|)alaikum$/.test(chats)) {
+        if (!isButtons && /^a(s|ss)alamu('|)alaikum$/.test(chats?.toLowerCase())) {
             const jawab_salam = [
                 'Wa\'alaikumusalam',
                 'Wa\'alaikumusalam wb',
@@ -634,7 +635,8 @@ module.exports = async (cakrayp, store, msg) => {
             ]
             return reply(randomArr(jawab_salam))
         }
-        if (/^i (love|mi(ss|s)|need) you$/.test(chats)) {
+        if (!isButtons && /^i\ (love|mi(ss|s)|need)\ you$/.test(chats?.toLowerCase())) {
+            const ambil_salinan = /^i\ (love|mi(ss|s)|need)\ you$/.exec(chats?.toLowerCase())[1]
             const kata_cht = [
                 'I love you',
                 'I luv yu',
@@ -642,9 +644,8 @@ module.exports = async (cakrayp, store, msg) => {
                 'I mis you',
                 'I need you',
             ]
-            return reply(randomArr(kata_cht) + " too")
+            return reply(kata_cht.filter(v => v.includes(ambil_salinan.toLowerCase())) + " too")
         }
-
 
         // Message Buttons
         const templateButtons_menu = [
